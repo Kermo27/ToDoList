@@ -3,15 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ToDoList.App.ToDo"
              Title="ToDo"
-             x:Name="Self">
+             x:Name="Self"
+             xmlns:view ="clr-namespace:ToDoList.App"
+             x:DataType="view:ToDo">
     <VerticalStackLayout>
         <Label 
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Entry
-            x:Name="ToDoItem"
+        <Entry Placeholder="Title..."
+            Text="{Binding Title}"
             />
+        <Entry Placeholder="Description..."
+            Text="{Binding Description}">
+        </Entry>
         <Button 
             Text="Add item" 
             Clicked="AddItem">
@@ -19,10 +24,13 @@
         <CollectionView
             ItemsSource="{Binding ToDoItems}">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <HorizontalStackLayout>
+                <DataTemplate x:DataType="view:ToDoItem">
+                    <HorizontalStackLayout Spacing="10">
                         <Label
-                            Text="{Binding .}">
+                            Text="{Binding Title}">
+                        </Label>
+                        <Label
+                            Text="{Binding Description}">
                         </Label>
                         <Button
                             Text="Delete item"
