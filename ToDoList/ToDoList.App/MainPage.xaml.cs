@@ -20,6 +20,11 @@
 
 			SemanticScreenReader.Announce(CounterBtn.Text);
 		}
+
+		private void GoToClicked(object sender, EventArgs e)
+		{
+			Shell.Current.GoToAsync(nameof(ToDo));
+		}
 	}
 
 }
