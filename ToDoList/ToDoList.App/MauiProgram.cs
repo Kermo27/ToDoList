@@ -17,6 +17,8 @@ namespace ToDoList.App
 
 #if DEBUG
 			builder.Logging.AddDebug();
+			//builder.Services.AddSingleton<TodoListPage>();
+			//builder.Services.AddTransient<TodoItemPage>();
 #endif
 
 			return builder.Build();

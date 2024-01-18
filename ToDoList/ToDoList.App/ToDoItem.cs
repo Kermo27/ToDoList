@@ -1,47 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ToDoList.App
 {
 	public class ToDoItem : INotifyPropertyChanged
 	{
+		public int ID { get; set; }
+		public string DisplayDate => TaskDate.ToString("dd-MM-yyyy HH:mm:ss");
+
 		private string _title;
-		public string Title 
-		{ 
-			get 
-			{ 
-				return _title; 
-			} 
-			set 
+		public string Title
+		{
+			get
+			{
+				return _title;
+			}
+			set
 			{
 				if (_title == value) return;
 
 				_title = value;
 				OnPropertyChanged();
-			} 
+			}
 		}
 
 		private string _description;
-		public string Description 
-		{ 
-			get 
+		public string Description
+		{
+			get
 			{
 				return _description;
 			}
 			set
 			{
-				if(_description == value) return;
+				if (_description == value) return;
 
 				_description = value;
 				OnPropertyChanged();
 			}
 		}
+
+		private DateTime _taskDate;
+		public DateTime TaskDate
+		{
+			get
+			{
+				return _taskDate;
+			}
+			set
+			{
+				if (_taskDate == value) return;
+
+				_taskDate = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(DisplayDate));
+			}
+		}
+
+		private bool _isChecked;
+		public bool IsChecked { get; set; }
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 
