@@ -32,24 +32,23 @@ public partial class ToDo : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		if (!isDataLoaded)
+
+		ToDoItems.Clear();
+
+		var toDoItems = await _database.GetItemsAsync();
+
+		toDoItems = toDoItems.OrderBy(item => item.TaskDate).ToList();
+
+		foreach (var item in toDoItems)
 		{
-			ToDoItems.Clear();
-
-			var toDoItems = await _database.GetItemsAsync();
-			foreach (var item in toDoItems)
+			ToDoItems.Add(new ToDoItem
 			{
-				ToDoItems.Add(new ToDoItem
-				{
-					ID = item.Id,
-					Title = item.Title,
-					Description = item.Description,
-					TaskDate = item.TaskDate,
-					IsChecked = item.IsChecked
-				});
-			}
-
-			isDataLoaded = true;
+				ID = item.Id,
+				Title = item.Title,
+				Description = item.Description,
+				TaskDate = item.TaskDate,
+				IsChecked = item.IsChecked
+			});
 		}
 	}
 
@@ -94,6 +93,10 @@ public partial class ToDo : ContentPage
 			TaskDate = item.TaskDate,
 			IsChecked = item.IsChecked
 		});
+
+		ToDoItems = new ObservableCollection<ToDoItem>(ToDoItems.OrderBy(i => i.TaskDate));
+
+		OnPropertyChanged(nameof(ToDoItems));
 	}
 
 	private void OnCheckBoxCheckedChanged(ToDoItem item)
