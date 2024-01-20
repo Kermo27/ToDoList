@@ -16,8 +16,6 @@ public partial class ToDo : ContentPage
 	public string TaskDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 	public bool IsChecked { get; set; }
 
-	private bool isDataLoaded = false;
-
 	public ToDo()
 	{
 		InitializeComponent();
