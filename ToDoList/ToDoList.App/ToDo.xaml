@@ -15,7 +15,11 @@
         <Entry Placeholder="Title..." Text="{Binding Title}" />
         <Entry Placeholder="Description..." Text="{Binding Description}" />
         <Button Clicked="AddItem" Text="Add item" />
-        <CollectionView ItemsSource="{Binding ToDoItems}">
+        <CollectionView
+            ItemSizingStrategy="MeasureFirstItem"
+            ItemsSource="{Binding ToDoItems}"
+            SelectionChanged="CollectionView_SelectionChanged"
+            SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="view:ToDoItem">
                     <HorizontalStackLayout Spacing="10">

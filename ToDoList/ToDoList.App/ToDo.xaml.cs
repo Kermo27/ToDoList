@@ -16,9 +16,12 @@ public partial class ToDo : ContentPage
 	public string TaskDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 	public bool IsChecked { get; set; }
 
+	private bool isDataLoaded = false;
+
 	public ToDo()
 	{
 		InitializeComponent();
+
 		BindingContext = this;
 		DeleteItemCommand = new Command<int>(DeleteItem);
 		UpdateItemCommand = new Command<ToDoItem>(UpdateItem);
@@ -29,17 +32,24 @@ public partial class ToDo : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		var toDoItems = await _database.GetItemsAsync();
-		foreach (var item in toDoItems)
+		if (!isDataLoaded)
 		{
-			ToDoItems.Add(new ToDoItem
+			ToDoItems.Clear();
+
+			var toDoItems = await _database.GetItemsAsync();
+			foreach (var item in toDoItems)
 			{
-				ID = item.Id,
-				Title = item.Title,
-				Description = item.Description,
-				TaskDate = item.TaskDate,
-				IsChecked = item.IsChecked
-			});
+				ToDoItems.Add(new ToDoItem
+				{
+					ID = item.Id,
+					Title = item.Title,
+					Description = item.Description,
+					TaskDate = item.TaskDate,
+					IsChecked = item.IsChecked
+				});
+			}
+
+			isDataLoaded = true;
 		}
 	}
 
@@ -96,5 +106,15 @@ public partial class ToDo : ContentPage
 			TaskDate = item.TaskDate,
 			IsChecked = item.IsChecked
 		});
+	}
+
+	private async void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	{
+		if (e.CurrentSelection.FirstOrDefault() is ToDoItem selectedItem)
+		{
+			await Navigation.PushAsync(new ToDoItemDetails(selectedItem));
+		}
+
+	((CollectionView)sender).SelectedItem = null;
 	}
 }
