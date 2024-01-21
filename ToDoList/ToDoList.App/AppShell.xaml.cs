@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace ToDoList.App
+﻿namespace ToDoList.App
 {
 	public partial class AppShell : Shell
 	{
@@ -9,6 +7,7 @@ namespace ToDoList.App
 			InitializeComponent();
 
 			Routing.RegisterRoute(nameof(ToDo), typeof(ToDo));
+			Routing.RegisterRoute(nameof(ToDoItemDetails), typeof(ToDoItemDetails));
 		}
 	}
 }

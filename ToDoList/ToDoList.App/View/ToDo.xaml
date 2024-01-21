@@ -4,9 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:ToDoList.App"
+    xmlns:vm="clr-namespace:ToDoList.App.ViewModel"
     x:Name="Self"
     Title="ToDo"
-    x:DataType="view:ToDo">
+    x:DataType="vm:ToDoViewModel">
     <VerticalStackLayout>
         <Label
             HorizontalOptions="Center"
@@ -14,11 +15,12 @@
             VerticalOptions="Center" />
         <Entry Placeholder="Title..." Text="{Binding Title}" />
         <Entry Placeholder="Description..." Text="{Binding Description}" />
-        <Button Clicked="AddItem" Text="Add item" />
+        <Button Command="{Binding AddItemCommand}" Text="Add item" />
         <CollectionView
             ItemSizingStrategy="MeasureFirstItem"
             ItemsSource="{Binding ToDoItems}"
-            SelectionChanged="CollectionView_SelectionChanged"
+            SelectedItem="{Binding SelectedItem}"
+            SelectionChangedCommand="{Binding CollectionViewSelectionChangedCommand}"
             SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="view:ToDoItem">
@@ -32,12 +34,12 @@
                         <Label Text="{Binding Description}" VerticalOptions="Center" />
                         <Label Text="{Binding DisplayDate}" VerticalOptions="Center" />
                         <Button
-                            Command="{Binding DeleteItemCommand, Source={x:Reference Self}}"
+                            Command="{Binding DeleteItemCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}"
                             CommandParameter="{Binding ID}"
                             Text="Delete item"
                             VerticalOptions="Center" />
                         <Button
-                            Command="{Binding UpdateItemCommand, Source={x:Reference Self}}"
+                            Command="{Binding UpdateItemCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}"
                             CommandParameter="{Binding .}"
                             HorizontalOptions="Center"
                             Text="Update item"

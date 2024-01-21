@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ToDoList.App.ToDoItemDetails"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:view="clr-namespace:ToDoList.App"
+    Title="ToDoItemDetails"
+    x:DataType="view:ToDoItemDetailsViewModel">
+    <VerticalStackLayout>
+        <Entry
+            FontSize="40"
+            HorizontalOptions="CenterAndExpand"
+            Text="{Binding Item.Title}"
+            VerticalOptions="CenterAndExpand" />
+        <Entry
+            Margin="20"
+            FontSize="30"
+            HorizontalOptions="CenterAndExpand"
+            Text="{Binding Item.Description}"
+            VerticalOptions="CenterAndExpand" />
+        <Label
+            FontSize="15"
+            HorizontalOptions="CenterAndExpand"
+            Text="{Binding Item.DisplayDate}"
+            VerticalOptions="CenterAndExpand" />
+        <Button
+            Margin="20"
+            Command="{Binding UpdateItemCommand}"
+            HorizontalOptions="Center"
+            Text="Update"
+            VerticalOptions="Center" />
+        <Button
+            Command="{Binding DeleteItemCommand}"
+            HorizontalOptions="Center"
+            Text="Delete"
+            VerticalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
