@@ -45,12 +45,25 @@ namespace ToDoList.App.ViewModel
 			{
 				string jsonString = JsonSerializer.Serialize(user);
 				File.WriteAllText("UserData.json", jsonString);
-				// Nie mam zielonego pojęcia dlaczego to działa zamiast await Shell.Current.GoToAsync(nameof(MainPage));
-				Application.Current.MainPage = new AppShell();
+				await Shell.Current.GoToAsync(nameof(MainPage));
 			}
 			else
 			{
 				ErrorLabelVisibility = true;
+			}
+		}
+
+		public void OnAppearing()
+		{
+			if (File.Exists("UserData.json"))
+			{
+				var jsonString = File.ReadAllText("UserData.json");
+				var user = JsonSerializer.Deserialize<User>(jsonString);
+
+				if (!string.IsNullOrEmpty(user.Name))
+				{
+					Shell.Current.GoToAsync(nameof(MainPage));
+				}
 			}
 		}
 	}

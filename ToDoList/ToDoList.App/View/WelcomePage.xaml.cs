@@ -9,4 +9,10 @@ public partial class WelcomePage : ContentPage
 		InitializeComponent();
 		BindingContext = new WelcomeViewModel();
 	}
+
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		((WelcomeViewModel)BindingContext).OnAppearing();
+	}
 }

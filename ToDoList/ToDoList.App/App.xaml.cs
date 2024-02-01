@@ -1,8 +1,4 @@
-﻿using System.Text.Json;
-using ToDoList.App.Model;
-using ToDoList.App.View;
-
-namespace ToDoList.App
+﻿namespace ToDoList.App
 {
 	public partial class App : Application
 	{
@@ -10,21 +6,23 @@ namespace ToDoList.App
 		{
 			InitializeComponent();
 
-			if (File.Exists("UserData.json"))
-			{
-				var jsonString = File.ReadAllText("UserData.json");
-				var user = JsonSerializer.Deserialize<User>(jsonString);
+			MainPage = new AppShell();
 
-				if (!string.IsNullOrEmpty(user.Name))
-				{
-					MainPage = new AppShell();
-				}
-			}
+			//if (File.Exists("UserData.json"))
+			//{
+			//	var jsonString = File.ReadAllText("UserData.json");
+			//	var user = JsonSerializer.Deserialize<User>(jsonString);
 
-			if (MainPage == null)
-			{
-				MainPage = new WelcomePage();
-			}
+			//	if (!string.IsNullOrEmpty(user.Name))
+			//	{
+			//		MainPage = new AppShell();
+			//	}
+			//}
+
+			//if (MainPage == null)
+			//{
+			//	MainPage = new WelcomePage();
+			//}
 		}
 	}
 }

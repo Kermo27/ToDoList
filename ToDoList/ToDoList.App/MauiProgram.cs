@@ -27,6 +27,7 @@ namespace ToDoList.App
 			builder.Services.AddSingleton<ToDoItemDetailsViewModel>();
 			builder.Services.AddSingleton<WelcomePage>();
 			builder.Services.AddSingleton<WelcomeViewModel>();
+			builder.Services.AddSingleton<MainPage>();
 			return builder.Build();
 		}
 	}
