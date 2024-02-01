@@ -25,6 +25,14 @@
 		{
 			Shell.Current.GoToAsync(nameof(ToDo));
 		}
+
+		private void DeleteJson(object sender, EventArgs e)
+		{
+			if (File.Exists("UserData.json"))
+			{
+				File.Delete("UserData.json");
+			}
+		}
 	}
 
 }

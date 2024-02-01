@@ -35,6 +35,7 @@
                 HorizontalOptions="Fill"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Text="Go to ToDoList" />
+            <Button Clicked="DeleteJson" Text="Delete json" />
         </VerticalStackLayout>
     </ScrollView>
 
