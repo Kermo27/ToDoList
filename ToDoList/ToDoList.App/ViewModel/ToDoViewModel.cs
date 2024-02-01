@@ -1,34 +1,23 @@
-﻿using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace ToDoList.App.ViewModel
 {
-	public class ToDoViewModel : INotifyPropertyChanged
+	public partial class ToDoViewModel : ObservableObject
 	{
 		private readonly ToDoItemDatabase _database;
 
-		public ObservableCollection<ToDoItem> ToDoItems { get; set; } = new ObservableCollection<ToDoItem>();
-
-		public ICommand AddItemCommand { get; set; }
-		public ICommand DeleteItemCommand { get; set; }
-		public ICommand UpdateItemCommand { get; set; }
-		public ICommand CheckedChangedCommand { get; set; }
-		public ICommand CollectionViewSelectionChangedCommand { get; set; }
+		[ObservableProperty]
+		private ObservableCollection<ToDoItem> _toDoItems = new ObservableCollection<ToDoItem>();
 
 		public string Title { get; set; }
 		public string Description { get; set; }
 		public string TaskDate = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 		public bool IsChecked { get; set; }
-		public object SelectedItem { get; set; }
 
 		public ToDoViewModel()
 		{
-			AddItemCommand = new Command(AddItem);
-			DeleteItemCommand = new Command<int>(DeleteItem);
-			UpdateItemCommand = new Command<ToDoItem>(UpdateItem);
-			CheckedChangedCommand = new Command<ToDoItem>(OnCheckBoxCheckedChanged);
-			CollectionViewSelectionChangedCommand = new Command(CollectionViewSelectionChanged);
 			_database = new ToDoItemDatabase();
 		}
 
@@ -53,7 +42,8 @@ namespace ToDoList.App.ViewModel
 			}
 		}
 
-		private async void AddItem()
+		[RelayCommand]
+		private async Task AddItem()
 		{
 			ToDoItem item = new ToDoItem();
 			item.Title = Title;
@@ -73,13 +63,18 @@ namespace ToDoList.App.ViewModel
 			item.ID = toDoItemDto.Id;
 		}
 
-		private void UpdateItem(ToDoItem item)
+		[RelayCommand]
+		private Task UpdateItem(ToDoItem item)
 		{
 			item.Title = Title;
 			item.Description = Description;
 			item.TaskDate = DateTime.Now;
 
-			_database.SaveItemAsync(new ToDoItemDto
+			ToDoItems = new ObservableCollection<ToDoItem>(ToDoItems.OrderBy(i => i.TaskDate));
+
+			OnPropertyChanged(nameof(ToDoItems));
+
+			return _database.SaveItemAsync(new ToDoItemDto
 			{
 				Id = item.ID,
 				Title = item.Title,
@@ -87,25 +82,23 @@ namespace ToDoList.App.ViewModel
 				TaskDate = item.TaskDate,
 				IsChecked = item.IsChecked
 			});
-
-			ToDoItems = new ObservableCollection<ToDoItem>(ToDoItems.OrderBy(i => i.TaskDate));
-
-			OnPropertyChanged(nameof(ToDoItems));
 		}
 
-		private void DeleteItem(int id)
+		[RelayCommand]
+		private Task DeleteItem(int id)
 		{
-			_database.DeleteItemAsync(id);
 			var item = ToDoItems.FirstOrDefault(i => i.ID == id);
 			if (item is not null)
 			{
 				ToDoItems.Remove(item);
 			}
+			return _database.DeleteItemAsync(id);
 		}
 
-		private void OnCheckBoxCheckedChanged(ToDoItem item)
+		[RelayCommand]
+		private Task OnCheckBoxCheckedChanged(ToDoItem item)
 		{
-			_database.SaveItemAsync(new ToDoItemDto
+			return _database.SaveItemAsync(new ToDoItemDto
 			{
 				Id = item.ID,
 				Title = item.Title,
@@ -115,23 +108,18 @@ namespace ToDoList.App.ViewModel
 			});
 		}
 
-		private async void CollectionViewSelectionChanged()
+		[RelayCommand]
+		private Task CollectionViewSelectionChanged(ToDoItem item)
 		{
-			if (SelectedItem != null)
+			if (item != null)
 			{
-				await Shell.Current.GoToAsync(nameof(ToDoItemDetails), new Dictionary<string, object>
+				return Shell.Current.GoToAsync(nameof(ToDoItemDetails), new Dictionary<string, object>
 			{
-				{ nameof(ToDoItemDetailsViewModel.Item), SelectedItem }
+				{ nameof(ToDoItemDetailsViewModel.Item), item }
 			});
 			}
 
-			SelectedItem = null;
-		}
-
-		public event PropertyChangedEventHandler? PropertyChanged;
-		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			return Task.CompletedTask;
 		}
 	}
 }

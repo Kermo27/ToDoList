@@ -1,69 +1,44 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json;
-using System.Windows.Input;
-using ToDoList.App.Model;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ToDoList.App.Services;
 
 namespace ToDoList.App.ViewModel
 {
-	public class WelcomeViewModel : INotifyPropertyChanged
+	public partial class WelcomeViewModel : ObservableObject
 	{
+		[ObservableProperty]
 		private string _name;
-		public string Name
-		{
-			get => _name;
-			set
-			{
-				_name = value;
-				OnPropertyChanged();
-			}
-		}
 
-		public ICommand SaveNameCommand => new Command(() => SaveName());
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
+		[ObservableProperty]
 		private bool _errorLabelVisibility;
-		public bool ErrorLabelVisibility
+
+		private readonly IUserData _userData;
+
+		public WelcomeViewModel(IUserData userData)
 		{
-			get => _errorLabelVisibility;
-			set
-			{
-				_errorLabelVisibility = value;
-				OnPropertyChanged();
-			}
+			_userData = userData;
 		}
 
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		[RelayCommand]
+		private Task SaveName()
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		private async void SaveName()
-		{
-			var user = new User { Name = Name };
-			if (user.Name != null)
+			if (!string.IsNullOrEmpty(Name))
 			{
-				string jsonString = JsonSerializer.Serialize(user);
-				File.WriteAllText("UserData.json", jsonString);
-				await Shell.Current.GoToAsync(nameof(MainPage));
+				_userData.SaveName(Name);
+				return Shell.Current.GoToAsync(nameof(MainPage));
 			}
 			else
 			{
 				ErrorLabelVisibility = true;
+				return Task.CompletedTask;
 			}
 		}
 
 		public void OnAppearing()
 		{
-			if (File.Exists("UserData.json"))
+			if (_userData.NameExists())
 			{
-				var jsonString = File.ReadAllText("UserData.json");
-				var user = JsonSerializer.Deserialize<User>(jsonString);
-
-				if (!string.IsNullOrEmpty(user.Name))
-				{
-					Shell.Current.GoToAsync(nameof(MainPage));
-				}
+				Shell.Current.GoToAsync(nameof(MainPage));
 			}
 		}
 	}

@@ -4,10 +4,10 @@ namespace ToDoList.App.View;
 
 public partial class WelcomePage : ContentPage
 {
-	public WelcomePage()
+	public WelcomePage(WelcomeViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = new WelcomeViewModel();
+		BindingContext = vm;
 	}
 
 	protected override void OnAppearing()

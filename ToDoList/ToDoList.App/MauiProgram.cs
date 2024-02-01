@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using ToDoList.App.Services;
 using ToDoList.App.View;
 using ToDoList.App.ViewModel;
 
@@ -28,6 +29,7 @@ namespace ToDoList.App
 			builder.Services.AddSingleton<WelcomePage>();
 			builder.Services.AddSingleton<WelcomeViewModel>();
 			builder.Services.AddSingleton<MainPage>();
+			builder.Services.AddSingleton<IUserData, UserData>();
 			return builder.Build();
 		}
 	}

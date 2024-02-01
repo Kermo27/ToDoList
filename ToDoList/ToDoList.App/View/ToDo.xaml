@@ -19,32 +19,48 @@
         <CollectionView
             ItemSizingStrategy="MeasureFirstItem"
             ItemsSource="{Binding ToDoItems}"
-            SelectedItem="{Binding SelectedItem}"
             SelectionChangedCommand="{Binding CollectionViewSelectionChangedCommand}"
-            SelectionMode="Single">
+            SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="view:ToDoItem">
-                    <HorizontalStackLayout Spacing="10">
-                        <view:CustomCheckbox
-                            x:Name="cb1"
-                            CheckedCommand="{Binding CheckedChangedCommand, Source={x:Reference Self}}"
-                            CheckedCommandParameter="{Binding .}"
-                            IsChecked="{Binding IsChecked}" />
-                        <Label Text="{Binding Title}" VerticalOptions="Center" />
-                        <Label Text="{Binding Description}" VerticalOptions="Center" />
-                        <Label Text="{Binding DisplayDate}" VerticalOptions="Center" />
-                        <Button
-                            Command="{Binding DeleteItemCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}"
-                            CommandParameter="{Binding ID}"
-                            Text="Delete item"
-                            VerticalOptions="Center" />
-                        <Button
-                            Command="{Binding UpdateItemCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}"
-                            CommandParameter="{Binding .}"
-                            HorizontalOptions="Center"
-                            Text="Update item"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItemView Command="{Binding DeleteItemCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}" CommandParameter="{Binding ID}">
+                                    <Label
+                                        Text="Delete"
+                                        TextColor="Red"
+                                        VerticalOptions="Center" />
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItemView Command="{Binding UpdateItemCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}" CommandParameter="{Binding .}">
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="Update"
+                                        TextColor="Blue"
+                                        VerticalOptions="Center" />
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <HorizontalStackLayout HeightRequest="40">
+                            <view:CustomCheckbox
+                                x:Name="cb1"
+                                CheckedCommand="{Binding CheckedChangedCommand, Source={x:Reference Self}}"
+                                CheckedCommandParameter="{Binding .}"
+                                IsChecked="{Binding IsChecked}" />
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="{Binding Title}" VerticalOptions="Center" />
+                                <Label Text="{Binding Description}" VerticalOptions="Center" />
+                                <Label Text="{Binding DisplayDate}" VerticalOptions="Center" />
+                                <HorizontalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}, Path=CollectionViewSelectionChangedCommand}" CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout.GestureRecognizers>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
