@@ -5,9 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:ToDoList.App"
     xmlns:vm="clr-namespace:ToDoList.App.ViewModel"
+    xmlns:converters="using:ToDoList.App.Converters"
     x:Name="Self"
     Title="ToDo"
     x:DataType="vm:ToDoViewModel">
+    <ContentPage.Resources>
+        <converters:ToDoItemToColorConverter x:Key="ColorConverter"/> 
+    </ContentPage.Resources>
     <VerticalStackLayout>
         <Label
             HorizontalOptions="Center"
@@ -45,10 +49,10 @@
                                 </SwipeItemView>
                             </SwipeItems>
                         </SwipeView.RightItems>
-                        <HorizontalStackLayout HeightRequest="40">
+                        <HorizontalStackLayout HeightRequest="40" BackgroundColor="{Binding IsChecked , Converter={StaticResource ColorConverter}}">
                             <view:CustomCheckbox
                                 x:Name="cb1"
-                                CheckedCommand="{Binding CheckedChangedCommand, Source={x:Reference Self}}"
+                                CheckedCommand="{Binding CheckedChangedCommand, Source={RelativeSource AncestorType={x:Type vm:ToDoViewModel}}}"
                                 CheckedCommandParameter="{Binding .}"
                                 IsChecked="{Binding IsChecked}" />
                             <HorizontalStackLayout Spacing="10">

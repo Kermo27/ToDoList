@@ -10,5 +10,6 @@ namespace ToDoList.App
 		public string Description { get; set; }
 		public DateTime TaskDate { get; set; }
 		public bool IsChecked { get; set; }
+		public string ImagePath { get; set; }
 	}
 }

@@ -37,7 +37,8 @@ namespace ToDoList.App.ViewModel
 					Title = item.Title,
 					Description = item.Description,
 					TaskDate = item.TaskDate,
-					IsChecked = item.IsChecked
+					IsChecked = item.IsChecked,
+					ImagePath = !string.IsNullOrEmpty(item.ImagePath) ? Path.Combine(FileSystem.AppDataDirectory, item.ImagePath) : null
 				});
 			}
 		}
@@ -71,9 +72,7 @@ namespace ToDoList.App.ViewModel
 			item.TaskDate = DateTime.Now;
 
 			ToDoItems = new ObservableCollection<ToDoItem>(ToDoItems.OrderBy(i => i.TaskDate));
-
-			OnPropertyChanged(nameof(ToDoItems));
-
+			
 			return _database.SaveItemAsync(new ToDoItemDto
 			{
 				Id = item.ID,
@@ -96,7 +95,7 @@ namespace ToDoList.App.ViewModel
 		}
 
 		[RelayCommand]
-		private Task OnCheckBoxCheckedChanged(ToDoItem item)
+		private Task CheckedChanged(ToDoItem item)
 		{
 			return _database.SaveItemAsync(new ToDoItemDto
 			{

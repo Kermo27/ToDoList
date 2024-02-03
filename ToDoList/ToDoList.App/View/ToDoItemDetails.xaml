@@ -18,6 +18,11 @@
             HorizontalOptions="CenterAndExpand"
             Text="{Binding Item.Description}"
             VerticalOptions="CenterAndExpand" />
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+            <Button Command="{Binding TakePhotoCommand}" Text="Take photo" />
+            <Button Command="{Binding PickPhotoCommand}" Text="Pick photo" />
+        </HorizontalStackLayout>
+        <Image Source="{Binding Item.ImagePath}" WidthRequest="200" HeightRequest="200" />
         <Label
             FontSize="15"
             HorizontalOptions="CenterAndExpand"

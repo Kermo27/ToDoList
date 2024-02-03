@@ -10,7 +10,7 @@ namespace ToDoList.App.ViewModel
 		private string _name;
 
 		[ObservableProperty]
-		private bool _errorLabelVisibility;
+		private bool _isNameValid;
 
 		private readonly IUserData _userData;
 
@@ -20,18 +20,16 @@ namespace ToDoList.App.ViewModel
 		}
 
 		[RelayCommand]
-		private Task SaveName()
+		private async Task SaveName()
 		{
-			if (!string.IsNullOrEmpty(Name))
+			if (!IsNameValid)
 			{
-				_userData.SaveName(Name);
-				return Shell.Current.GoToAsync(nameof(MainPage));
+				await Shell.Current.DisplayAlert("Error", "Invalid name", "OK");
+				return;
 			}
-			else
-			{
-				ErrorLabelVisibility = true;
-				return Task.CompletedTask;
-			}
+
+			_userData.SaveName(Name);
+			await Shell.Current.GoToAsync(nameof(MainPage));
 		}
 
 		public void OnAppearing()

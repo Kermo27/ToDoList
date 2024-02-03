@@ -1,12 +1,16 @@
-﻿namespace ToDoList.App
+﻿using ToDoList.App.Services;
+
+namespace ToDoList.App
 {
 	public partial class MainPage : ContentPage
 	{
 		int count = 0;
+		private IUserData _userData;
 
-		public MainPage()
+		public MainPage(IUserData userData)
 		{
 			InitializeComponent();
+			_userData = userData;
 		}
 
 		private void OnCounterClicked(object sender, EventArgs e)
@@ -28,10 +32,7 @@
 
 		private void DeleteJson(object sender, EventArgs e)
 		{
-			if (File.Exists("UserData.json"))
-			{
-				File.Delete("UserData.json");
-			}
+			_userData.DeleteUserData();
 		}
 	}
 

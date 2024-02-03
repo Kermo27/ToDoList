@@ -3,29 +3,38 @@
     x:Class="ToDoList.App.View.WelcomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:ToDoList.App.ViewModel"
+    x:DataType="vm:WelcomeViewModel"
     Title="WelcomePage">
+    
     <VerticalStackLayout>
         <Label
             FontSize="50"
             HorizontalOptions="Center"
             Text="Entry your name:"
             VerticalOptions="Center" />
+
         <Entry
             Margin="20"
             HorizontalOptions="Center"
             HorizontalTextAlignment="Center"
             MinimumWidthRequest="200"
-            Text="{Binding Name}"
-            VerticalOptions="Center" />
-        <Label
-            HorizontalOptions="Center"
-            IsVisible="{Binding ErrorLabelVisibility}"
-            Text="Name can not be null"
-            TextColor="Red"
-            VerticalOptions="Center" />
+            VerticalOptions="Center"
+            Text="{Binding Name}">
+            <Entry.Behaviors>
+                <toolkit:TextValidationBehavior
+                    x:Name="NameValidator"
+                    IsValid="{Binding IsNameValid}"
+                    Flags="ValidateOnAttaching,ValidateOnValueChanged"
+                    MinimumLength="1" />
+            </Entry.Behaviors>
+        </Entry>
+
         <Button
             Margin="20"
             Command="{Binding SaveNameCommand}"
             Text="Save" />
+
     </VerticalStackLayout>
 </ContentPage>

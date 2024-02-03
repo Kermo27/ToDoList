@@ -5,5 +5,6 @@
 		bool SaveName(string name);
 		bool NameExists();
 		string GetName();
+		bool DeleteUserData();
 	}
 }

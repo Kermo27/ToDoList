@@ -18,5 +18,8 @@ namespace ToDoList.App
 
 		[ObservableProperty]
 		private bool _isChecked;
+
+		[ObservableProperty]
+		private string? _imagePath;
 	}
 }

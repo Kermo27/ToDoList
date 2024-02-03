@@ -57,5 +57,34 @@ namespace ToDoList.App
 			await Init();
 			return await Database.DeleteAsync<ToDoItemDto>(id);
 		}
+
+		public async Task<string> SaveItemImagePathAsync(int id, string imagePath)
+		{
+			await Init();
+
+			var item = await Database.Table<ToDoItemDto>().Where(i => i.Id == id).FirstOrDefaultAsync();
+
+			if (item != null)
+			{
+				item.ImagePath = imagePath;
+				await Database.UpdateAsync(item);
+			}
+
+			return string.Empty;
+		}
+
+		public async Task<string> GetItemImagePathAsync(int id)
+		{
+			await Init();
+
+			var item = await Database.Table<ToDoItemDto>().Where(i => i.Id == id).FirstOrDefaultAsync();
+
+			if (item != null)
+			{
+				return item.ImagePath;
+			}
+
+			return string.Empty;
+		}
 	}
 }

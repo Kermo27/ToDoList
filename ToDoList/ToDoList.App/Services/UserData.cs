@@ -50,5 +50,16 @@ namespace ToDoList.App.Services
 
 			return false;
 		}
+
+		public bool DeleteUserData()
+		{
+			if (File.Exists(_userDataPath))
+			{
+				File.Delete(_userDataPath);
+				return true;
+			}
+
+			return false;
+		}
 	}
 }
